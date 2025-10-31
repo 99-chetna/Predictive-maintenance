@@ -18,7 +18,7 @@ duration = st.slider("Capture Duration (seconds)", 5, 60, 15)
 log_file = "vibration_log.csv"
 
 # ---------------------------------------------
-# 🧩 Initialize placeholders for live updates
+# 🧩 Placeholders for live updates
 # ---------------------------------------------
 chart_placeholder = st.empty()
 status_placeholder = st.empty()
@@ -35,11 +35,11 @@ def update_live_chart(timestamp, value):
     else:
         st.session_state.live_data = pd.concat([st.session_state.live_data, new_data], ignore_index=True)
 
-    # Update chart in real-time
+    # Show live updating chart
     chart_placeholder.line_chart(st.session_state.live_data.set_index("timestamp")["intensity"])
 
 # ---------------------------------------------
-# 🚀 Start Monitoring Button
+# 🚀 Start Monitoring
 # ---------------------------------------------
 if st.button("Start Monitoring"):
     st.info("⏳ Capturing real vibration data...")
@@ -48,15 +48,14 @@ if st.button("Start Monitoring"):
     st.success("✅ Capture complete! Data stored automatically in vibration_log.csv")
 
 # ---------------------------------------------
-# 📊 Show Logged Data if Exists
+# 📋 Show Latest Stored Data (No historical graph)
 # ---------------------------------------------
 if os.path.exists(log_file) and os.stat(log_file).st_size > 0:
     try:
         df = pd.read_csv(log_file)
         if not df.empty:
-            st.subheader("📊 Stored Vibration Data (Auto-Logged)")
-            st.line_chart(df.set_index("timestamp")["intensity"])
-            st.dataframe(df.tail(), use_container_width=True)
+            st.subheader("🗂️ Latest Vibration Readings (Auto-Logged)")
+            st.dataframe(df.tail(20), use_container_width=True)
         else:
             st.warning("⚠️ The log file is empty. Start monitoring first.")
     except Exception as e:
