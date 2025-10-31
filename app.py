@@ -19,4 +19,4 @@ try:
     st.line_chart(df.set_index("timestamp"))
     st.write(df.tail())
 except FileNotFoundError:
-    st.warning("No vibration data found yet. Run capture first.")  
+    st.warning("No vibration data found yet. Run capture first.")
